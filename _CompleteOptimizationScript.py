@@ -207,7 +207,7 @@ def RunOptimizations():
 
 # If the user has not selected any objects, throw an error.
 if (len(bpy.context.selected_objects) <= 0):
-    ShowMessageBox("You must select at least one object in the scene.", "We Might Die - Tile Optimization Script", 'ERROR')
+    ShowMessageBox("You must select at least one object in the scene.", "Automate Blender Scripts - Optimization Script", 'ERROR')
 else:
     ClearTerminal()
     # GO GO TILE OPTIMIZATIONS!     

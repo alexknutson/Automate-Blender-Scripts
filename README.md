@@ -17,6 +17,7 @@
 ```python
 import bpy
 
+# Loop over all materials in the project.
 for material in bpy.data.materials:
     material.use_backface_culling = True
 ```
@@ -32,6 +33,7 @@ for material in bpy.data.materials:
 ```python
 
 import bpy
+
 # Cache a reference to all selected objects.
 objs = [obj for obj in bpy.context.selected_objects if obj.type == 'MESH']
 
@@ -65,25 +67,26 @@ for obj in objs:
 ![Blender-Remove-Unused-Materials-Not-Assigned-To-Faces](https://user-images.githubusercontent.com/905228/192082924-1f154d50-796c-4e26-b213-06a4691dcf56.gif)
 ```python
 import bpy
+
 # Cache a reference to all selected objects.
 objs = [obj for obj in bpy.context.selected_objects if obj.type == 'MESH']
 
 for obj in objs:
         bpy.context.view_layer.objects.active = obj
         bpy.ops.object.material_slot_remove_unused()
-        print("Removed material... " + obj.name)
 ```
 
 ----
 <br>
 
-#### Remove All Empty(un-named) Material Slots from Selected Objects
+#### Remove All Empty(unnamed) Material Slots from Selected Objects
 ![Blender-Remove-Empty-Material-Slots-All-Selected-Objects](https://user-images.githubusercontent.com/905228/192082974-8bd7af82-3fd8-4157-b01c-893621ac491e.gif)
 
 > Unnamed material slots are removed from all selected objects and only the named materials remain.
 ```python
 import bpy
 
+# Cache a reference to all selected objects.
 objs = [obj for obj in bpy.context.selected_objects if obj.type == 'MESH']
 
 for obj in objs:
