@@ -1,6 +1,6 @@
 # Automate-Blender-Scripts
-![Automation Gif](https://media2.giphy.com/media/1nR6fu93A17vWZbO9c/giphy.gif)
 ## A collection of Python scripts to automate common blender tasks.
+![Automation Gif](https://media2.giphy.com/media/1nR6fu93A17vWZbO9c/giphy.gif)
 
 ### Install
 1) Clone the repo `git clone git@github.com:alexknutson/Automate-Blender-Scripts.git`
