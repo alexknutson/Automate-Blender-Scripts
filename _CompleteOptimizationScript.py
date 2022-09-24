@@ -166,7 +166,7 @@ def ApplyAlphabeticalOrderToMaterials(obj):
 def MergeByDistance(obj):
     global finalReport
     global totalVertsRemoved
-    mergeByDistanceThreshold = 0.001
+    mergeByDistanceThreshold = 0.0001
     
     # Cache a quick reference to the current vert count so we can compare later.
     oldVertCount = len(obj.data.vertices);
