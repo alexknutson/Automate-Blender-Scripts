@@ -1,5 +1,6 @@
 # Automate-Blender-Scripts
-## A collection of Python scripts to automate common blender tasks.
+A collection of Python scripts to automate common blender tasks.
+
 ![Automation Gif](https://media2.giphy.com/media/1nR6fu93A17vWZbO9c/giphy.gif)
 
 ### Install
