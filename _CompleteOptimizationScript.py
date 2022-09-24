@@ -60,7 +60,7 @@ def PrintFinalReport():
     print("")    
     print("FINAL REPORT")
     print("")  
-    print("Report Date: {}".format(today))
+    print("Date: {}".format(today))
     print("")
     for x in range(1):
         print("###########################################")
@@ -166,6 +166,7 @@ def ApplyAlphabeticalOrderToMaterials(obj):
 def MergeByDistance(obj):
     global finalReport
     global totalVertsRemoved
+    mergeByDistanceThreshold = 0.001
     
     # Cache a quick reference to the current vert count so we can compare later.
     oldVertCount = len(obj.data.vertices);
@@ -175,7 +176,7 @@ def MergeByDistance(obj):
     bpy.context.view_layer.objects.active = obj
     bpy.ops.object.editmode_toggle()
     bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.mesh.remove_doubles()
+    bpy.ops.mesh.remove_doubles(threshold = mergeByDistanceThreshold)
     bpy.ops.object.editmode_toggle()
     
     newVertCount = len(obj.data.vertices);
