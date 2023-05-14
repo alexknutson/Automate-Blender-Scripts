@@ -185,6 +185,19 @@ def MergeByDistance(obj):
     if (oldVertCount != newVertCount):
         finalReport += "Merge by Distance removed {difference} vertices in {name} \n".format(name=obj.name, difference=vertCountDifference)
 
+#########################
+# Remove any objects that have 0 vertices from the scene.
+#########################  
+def RemoveZeroVertObjectsFromScene():
+    scene = bpy.context.scene
+
+    empty_meshobs = [o for o in scene.objects
+                    if o.type == 'MESH'
+                    and not o.data.vertices]
+                 
+    while empty_meshobs:
+        bpy.data.objects.remove(empty_meshobs.pop()) 
+
 #endregion
 
 #region Init
@@ -205,6 +218,7 @@ def RunOptimizations():
             
     # Finalize by purging any orphan material data.
     PurgeOrphanMaterialData()
+    RemoveZeroVertObjectsFromScene()
 
 # If the user has not selected any objects, throw an error.
 if (len(bpy.context.selected_objects) <= 0):
