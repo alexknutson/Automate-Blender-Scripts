@@ -1,8 +1,19 @@
 # Automate-Blender-Scripts
-A collection of Python scripts to automate common blender tasks.
+A collection of Python scripts and add-ons to automate common blender tasks.
 
 ![Automation Gif](https://media2.giphy.com/media/1nR6fu93A17vWZbO9c/giphy.gif)
 
+## Add-ons
+#### Automated LOD Generation
+https://github.com/alexknutson/Automate-Blender-Scripts/assets/905228/63527dc5-23ff-47e1-9ec3-9f0621ca8db0
+### Install
+1) Clone the repo `git clone git@github.com:alexknutson/Automate-Blender-Scripts.git`
+2) Add the `_LODGenerator.py` as an add-on
+
+![image](https://github.com/alexknutson/Automate-Blender-Scripts/assets/905228/d1f2c3b0-f912-4b8a-9e0e-59f76a26a1f8)
+
+
+## Individual Scripts
 ### Install
 1) Clone the repo `git clone git@github.com:alexknutson/Automate-Blender-Scripts.git`
 2) Switch to the `Scripting` tab in Blender
@@ -11,7 +22,7 @@ A collection of Python scripts to automate common blender tasks.
 5) Select any objects you want the script to work on
 6) Click the "Play" button and let the magic happen
 
-## Examples Included
+### Examples Included
 
 #### Enable Backface Culling on All Materials
 ![Blender-Turn-On-Backface-Culling-On-All-Materials](https://user-images.githubusercontent.com/905228/192082577-e1804815-29ce-4a18-93b3-b3a66838890d.gif)
