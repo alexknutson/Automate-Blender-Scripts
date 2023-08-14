@@ -10,11 +10,7 @@ bl_info = {
     "description": "Generate Level of Detail (LOD) objects for the selected mesh"
 }
 
-class OBJECT_OT_generate_lods(Operator):
-    bl_idname = "object.generate_lods"
-    bl_label = "Generate LODs"
-    bl_options = {'REGISTER', 'UNDO'}
-
+class LODProperties(bpy.types.PropertyGroup):
     lod0_ratio: bpy.props.FloatProperty(
         name="LOD0 Decimation Ratio",
         default=0.9,
@@ -40,21 +36,35 @@ class OBJECT_OT_generate_lods(Operator):
         max=1.0,
     )
 
+class OBJECT_OT_generate_lods(Operator):
+    bl_idname = "object.generate_lods"
+    bl_label = "Generate LODs"
+    bl_options = {'REGISTER', 'UNDO'}
+
     def execute(self, context):
         obj = context.active_object
+         # Get the LODProperties
+        lod_props = context.scene.lod_properties
 
         if obj is None:
             self.report({'WARNING'}, "No object selected")
             return {'CANCELLED'}
 
-        decimate_ratios = [self.lod0_ratio, self.lod1_ratio, self.lod2_ratio, self.lod3_ratio]
+        # Get the collections that the original object belongs to
+        original_collections = obj.users_collection
+
+        # Use the ratios from LODProperties
+        decimate_ratios = [lod_props.lod0_ratio, lod_props.lod1_ratio, lod_props.lod2_ratio, lod_props.lod3_ratio]
         lod_names = ["_LOD0", "_LOD1", "_LOD2", "_LOD3"]
 
-        if "LOD" not in bpy.data.collections:
-            lod_collection = bpy.data.collections.new("LOD")
-            bpy.context.scene.collection.children.link(lod_collection)
-        else:
-            lod_collection = bpy.data.collections["LOD"]
+        ##############################################
+        # Optional - Create a new "LOD" collection in the root and make that the parent for the LOD objects.
+        # if "LOD" not in bpy.data.collections:
+        #     lod_collection = bpy.data.collections.new("LOD")
+        #     bpy.context.scene.collection.children.link(lod_collection)
+        # else:
+        #     lod_collection = bpy.data.collections["LOD"]
+        ##############################################
 
         original_position = obj.location.copy()
 
@@ -70,12 +80,16 @@ class OBJECT_OT_generate_lods(Operator):
             new_obj.data = obj.data.copy()
             new_obj.animation_data_clear()
 
-            new_obj.name = lod_names[i]
+            # Remove any ".001", ".002" from the object name
+            normalizedObjectName = new_obj.name.split(".")[0]
+            new_obj.name = normalizedObjectName + lod_names[i]
 
             decimate_mod = new_obj.modifiers.new(new_obj.name + "_decimate", 'DECIMATE')
             decimate_mod.ratio = ratio
 
-            lod_collection.objects.link(new_obj)
+            # Link the new object to the same collections as the original object
+            for collection in original_collections:
+                collection.objects.link(new_obj)
 
             # Adjust the translation to be a percentage of the width of the object
             new_obj.location.x = original_position.x + (i + 1) * separation_distance  
@@ -92,7 +106,7 @@ class OBJECT_OT_apply_lods(Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        lod_collection = bpy.data.collections.get("LOD")
+        lod_collection = context.view_layer.active_layer_collection.collection
 
         if lod_collection is None:
             self.report({'WARNING'}, "No LODs to apply")
@@ -120,16 +134,19 @@ class VIEW3D_PT_lod_generator(Panel):
 
     def draw(self, context):
         layout = self.layout
-        operator_generate = layout.operator(OBJECT_OT_generate_lods.bl_idname)
+        lod_props = context.scene.lod_properties
 
-        layout.prop(operator_generate, "lod0_ratio")
-        layout.prop(operator_generate, "lod1_ratio")
-        layout.prop(operator_generate, "lod2_ratio")
-        layout.prop(operator_generate, "lod3_ratio")
+        layout.prop(lod_props, "lod0_ratio")
+        layout.prop(lod_props, "lod1_ratio")
+        layout.prop(lod_props, "lod2_ratio")
+        layout.prop(lod_props, "lod3_ratio")
 
+        layout.operator(OBJECT_OT_generate_lods.bl_idname)
         layout.operator(OBJECT_OT_apply_lods.bl_idname)
 
 def register():
+    bpy.utils.register_class(LODProperties)
+    bpy.types.Scene.lod_properties = bpy.props.PointerProperty(type=LODProperties)
     bpy.utils.register_class(OBJECT_OT_generate_lods)
     bpy.utils.register_class(OBJECT_OT_apply_lods)
     bpy.utils.register_class(VIEW3D_PT_lod_generator)
@@ -138,6 +155,8 @@ def unregister():
     bpy.utils.unregister_class(VIEW3D_PT_lod_generator)
     bpy.utils.unregister_class(OBJECT_OT_apply_lods)
     bpy.utils.unregister_class(OBJECT_OT_generate_lods)
+    del bpy.types.Scene.lod_properties
+    bpy.utils.unregister_class(LODProperties)
 
 if __name__ == "__main__":
     register()
