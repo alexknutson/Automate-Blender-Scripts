@@ -119,8 +119,12 @@ class OBJECT_OT_apply_lods(Operator):
             return {'CANCELLED'}
 
         for obj in lod_collection.objects:
-            bpy.context.view_layer.objects.active = obj
-            bpy.ops.object.modifier_apply({"object": obj}, modifier=obj.name + "_decimate")
+            context.view_layer.objects.active = obj  # Make the object active
+            bpy.ops.object.mode_set(mode='OBJECT')  # Ensure we're in object mode
+            modifiers_to_apply = [mod for mod in obj.modifiers if mod.type == 'DECIMATE' and mod.name.endswith("_decimate")]
+            for mod in modifiers_to_apply:
+                # Apply the modifier by name
+                bpy.ops.object.modifier_apply(modifier=mod.name)
 
             obj.location = original_position
 
