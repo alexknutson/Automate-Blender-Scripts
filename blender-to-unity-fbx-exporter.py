@@ -1,3 +1,6 @@
+#
+# Fork of https://github.com/EdyJ/blender-to-unity-fbx-exporter with some added features.
+#
 bl_info = {
 	"name": "Unity FBX format",
 	"author": "Angel 'Edy' Garcia (@VehiclePhysics) & Alex Knutson",
@@ -9,7 +12,6 @@ bl_info = {
 	"wiki_url": "",
 	"category": "Import-Export",
 }
-
 
 import bpy
 import mathutils
